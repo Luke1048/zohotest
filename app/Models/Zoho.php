@@ -20,16 +20,17 @@ class Zoho extends Model
     // private $domains = ['eu', 'com'];
 
     // Tokens
-    // public function generateRefreshToken($code,$token) {
-    public function generateRefreshToken($code) {
+    public function generateRefreshToken($code, $client_id, $client_secret) {
         //get crm token credentials
         $zohoCredentials = $this->where('user_id',Auth::user()->id)->first();
 
         if(is_null($zohoCredentials)) {
             $this::create([
                 'user_id' => Auth::user()->id,
-                'client_id' => '1000.DCKGTZMMMJJVOBZE0K8DTZUVG5WBYE',
-                'client_secret' => '8f3baa9e9419d00a6047269e54f3e581735ce808b4',
+                // 'client_id' => '1000.DCKGTZMMMJJVOBZE0K8DTZUVG5WBYE',
+                'client_id' => $client_id,
+                // 'client_secret' => '8f3baa9e9419d00a6047269e54f3e581735ce808b4',
+                'client_secret' => $client_secret,
             ]);
         }
 
@@ -39,10 +40,10 @@ class Zoho extends Model
         $post = [
             'code' => $code,
             'redirect_uri' => 'http://example.com/callbackurl',
-            // 'client_id' => $zohoCredentials->client_id,
-            'client_id' => '1000.DCKGTZMMMJJVOBZE0K8DTZUVG5WBYE',
-            // 'client_secret' => $zohoCredentials->client_secret,
-            'client_secret' => '8f3baa9e9419d00a6047269e54f3e581735ce808b4',
+            // 'client_id' => '1000.DCKGTZMMMJJVOBZE0K8DTZUVG5WBYE',
+            'client_id' => $client_id,
+            // 'client_secret' => '8f3baa9e9419d00a6047269e54f3e581735ce808b4',
+            'client_secret' => $client_secret,
             'grant_type' => 'authorization_code',
         ];
 
@@ -296,10 +297,6 @@ class Zoho extends Model
     }
 
     public function createRecords($dealData, $taskData) {
-        // var_dump($dealData);
-        // dd($taskData);
-
-
         $token = AccessToken::where('user_id',Auth::user()->id)->latest()->first();
         $access_token = json_decode($token->value)->access_token;
 

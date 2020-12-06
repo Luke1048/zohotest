@@ -14,7 +14,13 @@ class ZohoController extends Controller {
     }
 
     public function connection(Zoho $zoho, Request $request) {
-        $response = $zoho->generateRefreshToken($request->field_code);
+        $request->validate([
+            'field_code' => ['required', 'string', 'min:1'],
+            'field_client_id' => ['required', 'string', 'min:1'],
+            'field_client_secret' => ['required', 'string', 'min:1'],
+        ]);
+
+        $response = $zoho->generateRefreshToken($request->field_code, $request->field_client_id, $request->field_client_secret);
 
         if($response->status() === 200) {
             return redirect()->route('records');
@@ -55,10 +61,10 @@ class ZohoController extends Controller {
     }*/
 
     public function createRecords(Zoho $zoho,  Request $request) {
-        /*$request->validate([
+        $request->validate([
             'deal_name' => ['required', 'string', 'min:1'],
             'task_name' => ['required', 'string', 'min:1'],
-        ]);*/
+        ]);
 
         $response = $zoho->createRecords(['Deal_Name' => $request->deal_name], ['Subject' => $request->task_name]);
         return $response;

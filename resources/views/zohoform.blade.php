@@ -44,9 +44,20 @@
                     <form method="POST" action="{{ route('connection') }}">
                         @csrf
                         <div class="form-group">
-                            <label for="field_code" class="">Temporary Code:</label>
-                            <input type="text" class="form-control" name="field_code" value="">
+                            <label for="field_client_id" class="">Client ID:</label>
+                            <input type="text" class="form-control" name="field_client_id" value="" required>
                         </div>
+
+                        <div class="form-group">
+                            <label for="field_client_secret" class="">Client Secret:</label>
+                            <input type="text" class="form-control" name="field_client_secret" value="" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="field_code" class="">Temporary Code:</label>
+                            <input type="text" class="form-control" name="field_code" value="" required>
+                        </div>
+
                         <button type="submit" class="btn btn-primary">Send</button>
                     </form>
                 </div>
